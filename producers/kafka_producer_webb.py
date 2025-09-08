@@ -52,7 +52,7 @@ def get_message_interval() -> int:
 
 def generate_messages(producer, topic, interval_secs):
     """
-    Generate a stream of buzz messages and send them to a Kafka topic.
+    Generate a stream of company chat messages and send them to a Kafka topic.
 
     Args:
         producer (KafkaProducer): The Kafka producer instance.
@@ -60,17 +60,29 @@ def generate_messages(producer, topic, interval_secs):
         interval_secs (int): Time in seconds between sending messages.
 
     """
+    # Simulate a busy company-wide chat with mixed messages
     string_list: list = [
-        "I love Python!",
-        "Kafka is awesome.",
-        "Streaming data is fun.",
-        "This is a buzz message.",
-        "Have a great day!",
+        "[general] John: Anyone know why the coffee machine is broken again?",
+        "[data-team] Sarah: The ETL pipeline failed this morning, investigating now",
+        "[random] Mike: Happy Friday everyone! Weekend plans?",
+        "[general] Lisa: Can someone help me with the quarterly sales dashboard?",
+        "[IT] Admin: Server maintenance scheduled for tonight at 9pm",
+        "[data-team] Alex: SQL query performance is slow on the warehouse today",
+        "[general] Tom: Meeting room B is available if anyone needs it",
+        "[marketing] Jenny: New campaign analytics look promising!",
+        "[data-team] Chris: Pipeline is back up and running, data flowing normally",
+        "[general] Sam: Free pizza in the break room!",
+        "[finance] Rachel: Need the monthly revenue dashboard updated",
+        "[data-team] Taylor: Found a bug in the customer analytics report",
+        "[general] Pat: Does anyone have the WiFi password for guests?",
+        "[data-team] Jordan: New data source integration completed successfully",
+        "[random] Casey: Weather is perfect for lunch outside today!"
     ]
+    
     try:
         while True:
             for message in string_list:
-                logger.info(f"Generated buzz: {message}")
+                logger.info(f"Generated company message: {message}")
                 producer.send(topic, value=message)
                 logger.info(f"Sent message to topic '{topic}': {message}")
                 time.sleep(interval_secs)
@@ -81,7 +93,6 @@ def generate_messages(producer, topic, interval_secs):
     finally:
         producer.close()
         logger.info("Kafka producer closed.")
-
 
 #####################################
 # Main Function

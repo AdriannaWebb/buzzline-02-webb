@@ -42,24 +42,46 @@ def get_kafka_consumer_group_id() -> int:
     logger.info(f"Kafka consumer group id: {group_id}")
     return group_id
 
+data_team_messages = 0
+
 
 #####################################
 # Define a function to process a single message
 # #####################################
 
-
 def process_message(message: str) -> None:
     """
-    Process a single message.
+    Process a single message and filter for data team related content.
 
-    For now, this function simply logs the message.
-    You can extend it to perform other tasks, like counting words
-    or storing data in a database.
+    Counts data team messages and alerts on issues.
 
     Args:
         message (str): The message to process.
     """
+    global data_team_messages
+    
     logger.info(f"Processing message: {message}")
+    
+    # Data team keywords to look for
+    data_keywords = [
+        "data-team", "etl", "pipeline", "sql", "dashboard", "analytics", 
+        "warehouse", "query", "database", "report", "data source"
+    ]
+    
+    # Check if message is data team related
+    message_lower = message.lower()
+    is_data_related = any(keyword in message_lower for keyword in data_keywords)
+    
+    if is_data_related:
+        data_team_messages += 1
+        logger.warning(f"DATA TEAM MESSAGE #{data_team_messages}: {message}")
+        
+        # Specific alerts for different types of data issues
+        if "failed" in message_lower or "error" in message_lower or "bug" in message_lower:
+            logger.error("URGENT: Data team reporting an issue!")
+        elif "completed" in message_lower or "running" in message_lower or "up" in message_lower:
+            logger.info("GOOD NEWS: Data team reports success!")
+
 
 
 #####################################
