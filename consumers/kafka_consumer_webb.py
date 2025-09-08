@@ -24,6 +24,8 @@ from utils.utils_logger import logger
 
 load_dotenv()
 
+data_team_messages = 0
+
 #####################################
 # Getter Functions for .env Variables
 #####################################
@@ -42,7 +44,6 @@ def get_kafka_consumer_group_id() -> int:
     logger.info(f"Kafka consumer group id: {group_id}")
     return group_id
 
-data_team_messages = 0
 
 
 #####################################
